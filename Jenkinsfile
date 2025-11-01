@@ -2,13 +2,15 @@ pipeline {
     agent any
 
     environment {
-        
         DOCKER_IMAGE = "petclinic-app"
         DOCKER_TAG = "latest"
     }
 
-    stages {
+    options {
+        timeout(time: 30, unit: 'MINUTES')
+    }
 
+    stages {
         stage('Checkout') {
             steps {
                 echo 'Cloning the repository...'
@@ -19,22 +21,21 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project using Maven...'
-                sh 'chmod +x ./mvnw'
-                sh './mvnw clean compile'
+                sh 'mvn clean compile'  
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Running unit tests...'
-                sh './mvnw test'
+                sh 'mvn test'  
             }
         }
 
         stage('Package') {
             steps {
                 echo 'Packaging the application into a JAR...'
-                sh './mvnw package -DskipTests'
+                sh 'mvn package -DskipTests'  
             }
         }
 
@@ -59,10 +60,10 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline executed successfully!'
+            echo 'huh!.... Pipeline executed successfully!'
         }
         failure {
-            echo 'OOO nooooo.....Pipeline failed! Check Jenkins logs for details.'
+            echo 'ooo noooo.... Pipeline failed! Check Jenkins logs for details.'
         }
     }
 }
