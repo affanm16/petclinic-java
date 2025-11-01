@@ -1,41 +1,67 @@
 pipeline {
     agent any
 
+    environment {
+        
+        DOCKER_IMAGE = "petclinic-app"
+        DOCKER_TAG = "latest"
+    }
+
     stages {
+
+        stage('Checkout') {
+            steps {
+                echo 'Cloning the repository...'
+                git branch: 'main', url: 'https://github.com/affanm16/petclinic-java'
+            }
+        }
+
         stage('Build') {
             steps {
-                git 'http://github.com/USER/REPO.git'
-                // Run Maven Wrapper Commands
-                echo 'Building the Project with maven compile'
+                echo 'Building the project using Maven...'
+                sh './mvnw clean compile'
             }
         }
 
         stage('Test') {
             steps {
-                // Run Maven Wrapper Commands
-                echo 'Testing the Project with maven test'
+                echo 'Running unit tests...'
+                sh './mvnw test'
             }
         }
 
         stage('Package') {
             steps {
-                // Run Maven Wrapper Commands
-                echo 'Packaging the Project with maven package'
+                echo 'Packaging the application into a JAR...'
+                sh './mvnw package -DskipTests'
             }
         }
 
         stage('Containerize') {
             steps {
-                // Docker build command
-                echo 'Containerize the App with docker'
+                echo 'Building Docker image...'
+                sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
             }
         }
 
         stage('Deploy') {
             steps {
-                // Docker run command with detached mode
-                echo 'Deploy the App with Docker'
+                echo 'Running Docker container...'
+                sh '''
+                    docker ps -q --filter "name=petclinic" | xargs -r docker stop
+                    docker ps -a -q --filter "name=petclinic" | xargs -r docker rm
+                    docker run -d --name petclinic -p 8080:8080 ${DOCKER_IMAGE}:${DOCKER_TAG}
+                '''
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline executed successfully!'
+        }
+        failure {
+            echo 'OOO nooooo.....Pipeline failed! Check Jenkins logs for details.'
         }
     }
 }
