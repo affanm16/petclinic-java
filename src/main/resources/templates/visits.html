@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Visits List</title>
+</head>
+<body>
+    <h1>Visits</h1>
+    <a href="/visits/add">Add New Visit</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Reason</th>
+                <th>Treatment</th>
+                <th>Pet</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="visit : ${visits}">
+                <td th:text="${visit.id}">1</td>
+                <td th:text="${visit.date}">2024-09-20</td>
+                <td th:text="${visit.reason}">Checkup</td>
+                <td th:text="${visit.treatment}">Vaccine</td>
+                <td th:text="${visit.pet.name}">Buddy</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

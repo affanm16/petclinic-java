@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Owners List</title>
+</head>
+<body>
+    <h1>Owners</h1>
+    <a href="/owners/add">Add New Owner</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Contact Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="owner : ${owners}">
+                <td th:text="${owner.id}">1</td>
+                <td th:text="${owner.name}">John Doe</td>
+                <td th:text="${owner.contactNumber}">1234567890</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Visit</title>
+</head>
+<body>
+    <h1>Add Visit</h1>
+    <form action="/visits/add" method="post">
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+        <br>
+        <label for="reason">Reason:</label>
+        <input type="text" id="reason" name="reason" required>
+        <br>
+        <label for="treatment">Treatment:</label>
+        <input type="text" id="treatment" name="treatment" required>
+        <br>
+        <label for="pet">Pet:</label>
+        <select id="pet" name="pet.id">
+            <option th:each="pet : ${pets}" th:value="${pet.id}" th:text="${pet.name}"></option>
+        </select>
+        <br>
+        <button type="submit">Add Visit</button>
+    </form>
+    <a href="/visits">Back to Visits List</a>
+</body>
+</html>
