@@ -7,6 +7,7 @@ Your Jenkins pipeline has been updated to automatically build and deploy the Pet
 ## 📦 Files Created/Modified
 
 ### 1. **Dockerfile** (Updated)
+
 - ✅ Changed base image from OpenJDK 11 to Eclipse Temurin 17 (matches pom.xml)
 - ✅ Implemented multi-stage build for smaller image size
 - ✅ Added non-root user for security
@@ -15,6 +16,7 @@ Your Jenkins pipeline has been updated to automatically build and deploy the Pet
 - ✅ Optimized for production deployment
 
 ### 2. **Jenkinsfile** (Completely Rewritten)
+
 - ✅ **NO Docker Hub required** - transfers image directly to EC2
 - ✅ Automated EC2 SSH deployment
 - ✅ Test report publishing
@@ -25,6 +27,7 @@ Your Jenkins pipeline has been updated to automatically build and deploy the Pet
 - ✅ Better error handling and logging
 
 ### 3. **deploy.sh** (New)
+
 - ✅ Automated deployment script for EC2
 - ✅ Handles Docker installation if missing
 - ✅ Loads Docker image from tar file (no registry!)
@@ -34,17 +37,20 @@ Your Jenkins pipeline has been updated to automatically build and deploy the Pet
 - ✅ Cleans up old images
 
 ### 4. **.dockerignore** (New)
+
 - ✅ Optimizes Docker build context
 - ✅ Excludes unnecessary files
 - ✅ Reduces image size and build time
 
 ### 5. **JENKINS_SETUP.md** (New)
+
 - ✅ Complete setup guide
 - ✅ Step-by-step instructions
 - ✅ Prerequisites checklist
 - ✅ Troubleshooting section
 
 ### 6. **DEPLOYMENT_CHECKLIST.md** (New)
+
 - ✅ Quick reference guide
 - ✅ Commands cheat sheet
 - ✅ Common issues and solutions
@@ -87,18 +93,24 @@ GitHub Push → Jenkins Webhook
 ## ⚙️ What You Need to Do Now
 
 ### 1. Jenkins Setup (One-time)
+
 Add these **2 credentials** in Jenkins (NO Docker Hub needed!):
+
 - **ec2-ssh-key**: Your EC2 SSH private key (.pem file)
 - **ec2-host**: Your EC2 public IP or DNS
 
 ### 2. Update Jenkinsfile (Optional)
+
 If using Ubuntu instead of Amazon Linux, change line 7:
+
 ```groovy
 EC2_USER = "ubuntu"  // Default is "ec2-user" for Amazon Linux
 ```
 
 ### 3. Prepare EC2 Instance
+
 SSH to your EC2 and run:
+
 ```bash
 # Install Docker
 sudo yum install docker -y
@@ -118,11 +130,14 @@ EXIT;
 ```
 
 ### 4. Configure Security Group
+
 Ensure your EC2 security group allows:
+
 - Port 22 (SSH) - from Jenkins server IP
 - Port 8081 (Application) - from anywhere (0.0.0.0/0)
 
 ### 5. Push to GitHub
+
 ```bash
 git add .
 git commit -m "Configure Jenkins CI/CD pipeline for EC2 deployment"
@@ -130,17 +145,20 @@ git push origin main
 ```
 
 ### 6. Run Pipeline
+
 Go to Jenkins → Your Pipeline → Build Now
 
 ## 🎉 After Successful Deployment
 
 Your application will be available at:
+
 - **Main URL**: `http://<your-ec2-ip>:8081`
 - **Health Check**: `http://<your-ec2-ip>:8081/actuator/health`
 
 ## 📱 Application Features
 
 Once deployed, you can:
+
 - View all pet owners: `/owners`
 - View all pets: `/pets`
 - View all visits: `/visits`
@@ -150,7 +168,7 @@ Once deployed, you can:
 
 1. **Check Jenkins**: Ensure all stages are green ✅
 2. **Check Docker Hub**: Verify image was pushed
-3. **Check EC2**: 
+3. **Check EC2**:
    ```bash
    docker ps  # Should show running container
    docker logs petclinic  # Check application logs
@@ -159,16 +177,16 @@ Once deployed, you can:
 
 ## 📊 Key Improvements
 
-| Before | After |
-|--------|-------|
-| Manual deployment | Automated CI/CD |
-| Wrong Java version (11 vs 17) | Correct Java 17 |
-| Large Docker image | Optimized multi-stage build |
-| No health checks | Automated health verification |
-| Local deployment only | Automated EC2 deployment |
-| No registry push | Pushes to Docker Hub |
-| No rollback capability | Can rollback to previous builds |
-| Unclear setup process | Complete documentation |
+| Before                        | After                           |
+| ----------------------------- | ------------------------------- |
+| Manual deployment             | Automated CI/CD                 |
+| Wrong Java version (11 vs 17) | Correct Java 17                 |
+| Large Docker image            | Optimized multi-stage build     |
+| No health checks              | Automated health verification   |
+| Local deployment only         | Automated EC2 deployment        |
+| No registry push              | Pushes to Docker Hub            |
+| No rollback capability        | Can rollback to previous builds |
+| Unclear setup process         | Complete documentation          |
 
 ## 🛡️ Security Features
 
@@ -217,6 +235,7 @@ Once deployed, you can:
 ## ✨ You're All Set!
 
 Once you complete the setup steps above and push to GitHub, Jenkins will automatically:
+
 1. ✅ Build your application
 2. ✅ Run tests
 3. ✅ Create Docker image
@@ -231,6 +250,7 @@ Once you complete the setup steps above and push to GitHub, Jenkins will automat
 ## 🤔 Why No Docker Hub?
 
 **Advantages:**
+
 - ✅ No external account needed
 - ✅ Completely free
 - ✅ More secure (image stays in your infrastructure)
@@ -239,6 +259,7 @@ Once you complete the setup steps above and push to GitHub, Jenkins will automat
 - ✅ No rate limits or storage concerns
 
 **When you WOULD want Docker Hub/Registry:**
+
 - Multiple EC2 instances to deploy to
 - Large team sharing images
 - Complex microservices architecture

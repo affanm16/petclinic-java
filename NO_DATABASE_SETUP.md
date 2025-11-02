@@ -14,6 +14,7 @@ Your Pet Clinic application now uses **H2 in-memory database** instead of MySQL.
 ## How It Works
 
 ### H2 Database
+
 - **In-Memory**: Database exists only in RAM while the application runs
 - **Automatic**: Spring Boot automatically configures everything
 - **Fresh Start**: Each time you restart the container, you get a clean database
@@ -64,11 +65,13 @@ sudo -u jenkins docker ps
 ## Access Your Application
 
 ### Application URL
+
 ```
 http://<your-ec2-public-ip>:8081
 ```
 
 ### Optional: H2 Console (View Database)
+
 ```
 http://<your-ec2-public-ip>:8081/h2-console
 
@@ -84,11 +87,11 @@ Connection Details:
 
 Make sure your EC2 security group allows:
 
-| Port | Purpose | Source |
-|------|---------|--------|
-| 8080 | Jenkins | Your IP |
+| Port | Purpose        | Source                 |
+| ---- | -------------- | ---------------------- |
+| 8080 | Jenkins        | Your IP                |
 | 8081 | Pet Clinic App | 0.0.0.0/0 (or Your IP) |
-| 22   | SSH | Your IP |
+| 22   | SSH            | Your IP                |
 
 ---
 
@@ -100,7 +103,7 @@ Make sure your EC2 security group allows:
 ❌ Docker Hub account  
 ❌ SSH keys  
 ❌ Remote deployment scripts  
-❌ Complex configuration  
+❌ Complex configuration
 
 ---
 
@@ -113,7 +116,9 @@ Make sure your EC2 security group allows:
 3. **No persistence**: If you need to keep data permanently, you would need MySQL/PostgreSQL
 
 ### For This Project:
+
 Since this is a **demo/testing application**, H2 is perfect! You can:
+
 - Add owners, pets, and visits
 - Test all features
 - Every deployment gives you a fresh start
@@ -123,6 +128,7 @@ Since this is a **demo/testing application**, H2 is perfect! You can:
 ## Troubleshooting
 
 ### If application doesn't start:
+
 ```bash
 # Check container logs
 docker logs petclinic
@@ -135,6 +141,7 @@ docker images | grep petclinic
 ```
 
 ### If health check fails:
+
 ```bash
 # Wait 30-40 seconds after deployment
 # Then check manually:
@@ -142,6 +149,7 @@ curl http://localhost:8081/actuator/health
 ```
 
 ### If port 8081 is busy:
+
 ```bash
 # Check what's using the port
 sudo lsof -i :8081
@@ -193,22 +201,26 @@ docker rm petclinic
 ## Quick Reference
 
 ### Start fresh deployment:
+
 1. Push code to GitHub
 2. Click "Build Now" in Jenkins
 3. Wait ~3-5 minutes
 4. Access application at port 8081
 
 ### View application logs:
+
 ```bash
 docker logs -f petclinic
 ```
 
 ### Restart application:
+
 ```bash
 docker restart petclinic
 ```
 
 ### Stop application:
+
 ```bash
 docker stop petclinic
 ```

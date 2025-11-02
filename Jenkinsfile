@@ -1,11 +1,17 @@
 pipeline {
     agent any
+    
+    tools {
+        jdk 'Java17'
+    }
 
     environment {
         DOCKER_IMAGE = "petclinic-app"
         DOCKER_TAG = "${BUILD_NUMBER}"
         CONTAINER_NAME = "petclinic"
         APP_PORT = "8081"
+        JAVA_HOME = "${tool 'Java17'}"
+        PATH = "${JAVA_HOME}/bin:${env.PATH}"
     }
 
     options {
@@ -25,6 +31,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project using Maven...'
+                sh 'java -version'  
                 sh 'mvn clean compile'  
             }
         }

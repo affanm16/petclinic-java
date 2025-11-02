@@ -5,12 +5,14 @@ This guide will help you set up the complete CI/CD pipeline to deploy the Pet Cl
 ## Prerequisites
 
 ### 1. AWS EC2 Instance Setup
+
 - Launch an EC2 instance (Amazon Linux 2 or Ubuntu)
 - Instance type: t2.medium or larger (minimum 2GB RAM)
 - Security Group: Open ports 22 (SSH), 8081 (Application), and optionally 3306 (MySQL)
 - Save your EC2 SSH key pair (.pem file)
 
 ### 2. Jenkins Server Setup
+
 - Jenkins installed and running
 - Plugins required:
   - Docker Pipeline
@@ -21,6 +23,7 @@ This guide will help you set up the complete CI/CD pipeline to deploy the Pet Cl
   - Blue Ocean (optional, for better UI)
 
 ### 3. Docker Hub Account (or AWS ECR)
+
 - Create a Docker Hub account if you don't have one
 - Create a repository for your application
 
@@ -31,6 +34,7 @@ This guide will help you set up the complete CI/CD pipeline to deploy the Pet Cl
 Go to Jenkins Dashboard → Manage Jenkins → Credentials → System → Global credentials
 
 #### a) Add Docker Hub Credentials
+
 - **Kind**: Username with password
 - **Scope**: Global
 - **ID**: `dockerhub-credentials`
@@ -39,6 +43,7 @@ Go to Jenkins Dashboard → Manage Jenkins → Credentials → System → Global
 - **Description**: Docker Hub Credentials
 
 #### b) Add EC2 SSH Private Key
+
 - **Kind**: SSH Username with private key
 - **Scope**: Global
 - **ID**: `ec2-ssh-key`
@@ -47,6 +52,7 @@ Go to Jenkins Dashboard → Manage Jenkins → Credentials → System → Global
 - **Description**: EC2 SSH Private Key
 
 #### c) Add EC2 Host Address
+
 - **Kind**: Secret text
 - **Scope**: Global
 - **Secret**: Your EC2 public IP or DNS (e.g., `ec2-xx-xxx-xxx-xxx.compute-1.amazonaws.com`)
@@ -56,6 +62,7 @@ Go to Jenkins Dashboard → Manage Jenkins → Credentials → System → Global
 ### Step 2: Update Jenkinsfile
 
 Edit the `Jenkinsfile` and update these variables:
+
 ```groovy
 DOCKER_REGISTRY = "your-dockerhub-username" // Replace with your Docker Hub username
 EC2_USER = "ec2-user" // Change to "ubuntu" if using Ubuntu AMI
@@ -99,6 +106,7 @@ sudo mysql
 ```
 
 In MySQL console:
+
 ```sql
 CREATE DATABASE pet_clinic;
 CREATE USER 'root'@'localhost' IDENTIFIED BY 'Root123$';
@@ -135,6 +143,7 @@ For automatic builds on push:
 ### Step 6: Update Application Configuration
 
 If your EC2 MySQL is on a different host, update `application.properties`:
+
 ```properties
 spring.datasource.url=jdbc:mysql://your-mysql-host:3306/pet_clinic?useSSL=false
 spring.datasource.username=your-username
@@ -144,11 +153,13 @@ spring.datasource.password=your-password
 ## Running the Pipeline
 
 ### Manual Trigger
+
 1. Go to Jenkins Dashboard
 2. Click on `petclinic-pipeline`
 3. Click "Build Now"
 
 ### Automatic Trigger
+
 - Push changes to the `main` branch in GitHub
 - Jenkins will automatically start the build
 
@@ -166,31 +177,37 @@ spring.datasource.password=your-password
 ## Accessing the Application
 
 After successful deployment:
+
 - URL: `http://your-ec2-public-ip:8081`
 - Health Check: `http://your-ec2-public-ip:8081/actuator/health`
 
 ## Troubleshooting
 
 ### Build Fails at Docker Build Stage
+
 - Ensure Docker is installed on Jenkins server
 - Add Jenkins user to docker group: `sudo usermod -aG docker jenkins`
 - Restart Jenkins: `sudo systemctl restart jenkins`
 
 ### SSH Connection Issues
+
 - Verify EC2 security group allows SSH (port 22) from Jenkins server
 - Check SSH key permissions: `chmod 400 your-key.pem`
 - Verify EC2 instance is running
 
 ### Container Fails to Start
+
 - SSH into EC2 and check logs: `docker logs petclinic`
 - Verify MySQL is running: `sudo systemctl status mysqld`
 - Check database connection in application logs
 
 ### Port Already in Use
+
 - Stop existing containers: `docker stop petclinic`
 - Remove old containers: `docker rm petclinic`
 
 ### Health Check Fails
+
 - Verify application is running: `docker ps`
 - Check application logs: `docker logs petclinic`
 - Ensure port 8081 is open in EC2 security group
@@ -205,6 +222,7 @@ After successful deployment:
 6. **Scan images**: Use Docker image scanning tools for vulnerabilities
 
 ## Directory Structure
+
 ```
 petclinic/
 ├── Jenkinsfile              # Jenkins pipeline configuration
@@ -225,6 +243,7 @@ petclinic/
 ## Support
 
 For issues or questions:
+
 1. Check Jenkins console output for errors
 2. Review EC2 instance logs
 3. Verify all prerequisites are met
@@ -233,6 +252,7 @@ For issues or questions:
 ---
 
 **Note**: This is a basic setup for demonstration. For production use, consider:
+
 - Using AWS RDS for database
 - Implementing proper secrets management (AWS Secrets Manager)
 - Setting up load balancers and auto-scaling

@@ -18,6 +18,7 @@ A fully automated pipeline that deploys your Spring Boot app to EC2 **without Do
 Go to: **Jenkins → Manage Jenkins → Credentials → System → Global credentials → Add Credentials**
 
 #### Credential 1: EC2 SSH Key
+
 ```
 Kind: SSH Username with private key
 ID: ec2-ssh-key
@@ -26,6 +27,7 @@ Private Key: [Upload your .pem file]
 ```
 
 #### Credential 2: EC2 Host
+
 ```
 Kind: Secret text
 Secret: [Your EC2 public IP, e.g., 3.85.123.45]
@@ -37,11 +39,13 @@ ID: ec2-host
 ### Step 2: Prepare EC2 (10 minutes)
 
 SSH to your EC2:
+
 ```bash
 ssh -i your-key.pem ec2-user@your-ec2-ip
 ```
 
 Run these commands:
+
 ```bash
 # Install Docker
 sudo yum update -y
@@ -71,14 +75,15 @@ exit
 
 In AWS Console, add these inbound rules:
 
-| Type | Port | Source | Purpose |
-|------|------|--------|---------|
-| SSH | 22 | Jenkins IP | Jenkins deployment |
-| Custom TCP | 8081 | 0.0.0.0/0 | Application access |
+| Type       | Port | Source     | Purpose            |
+| ---------- | ---- | ---------- | ------------------ |
+| SSH        | 22   | Jenkins IP | Jenkins deployment |
+| Custom TCP | 8081 | 0.0.0.0/0  | Application access |
 
 ## Deploy!
 
 1. **Create Jenkins Pipeline Job:**
+
    - New Item → Pipeline
    - Name: `petclinic-pipeline`
    - Pipeline from SCM → Git
@@ -88,6 +93,7 @@ In AWS Console, add these inbound rules:
    - Save
 
 2. **Run the Pipeline:**
+
    - Click "Build Now"
    - Watch the magic happen! ✨
 
@@ -144,36 +150,45 @@ All in **one push!** 🚀
 ## Troubleshooting
 
 ### ❌ "Permission denied" during SSH
+
 **Solution:** Check that Jenkins has the correct SSH key credential
 
 ### ❌ Container won't start
+
 **Solution:** Check MySQL is running:
+
 ```bash
 ssh ec2-user@your-ec2-ip "sudo systemctl status mysqld"
 ```
 
 ### ❌ "Port 8081 already in use"
-**Solution:** 
+
+**Solution:**
+
 ```bash
 ssh ec2-user@your-ec2-ip "docker stop petclinic; docker rm petclinic"
 ```
 
 ### ❌ Can't access application from browser
+
 **Solution:** Check EC2 security group allows port 8081 from 0.0.0.0/0
 
 ## Monitoring Your Deployment
 
 Check container status:
+
 ```bash
 ssh ec2-user@your-ec2-ip "docker ps"
 ```
 
 View application logs:
+
 ```bash
 ssh ec2-user@your-ec2-ip "docker logs -f petclinic"
 ```
 
 Check health:
+
 ```bash
 curl http://your-ec2-ip:8081/actuator/health
 ```
@@ -190,6 +205,7 @@ curl http://your-ec2-ip:8081/actuator/health
 ### Enable Auto-Deploy on Git Push
 
 Add GitHub webhook:
+
 1. GitHub repo → Settings → Webhooks → Add webhook
 2. Payload URL: `http://your-jenkins-url/github-webhook/`
 3. Content type: `application/json`
@@ -204,13 +220,13 @@ Install Jenkins Slack plugin and get notified of build status!
 
 ## Files in This Project
 
-| File | Purpose |
-|------|---------|
-| `Jenkinsfile` | Pipeline definition |
-| `Dockerfile` | Container image spec |
-| `deploy.sh` | EC2 deployment script |
-| `pom.xml` | Maven build config |
-| `.dockerignore` | Build optimization |
+| File            | Purpose               |
+| --------------- | --------------------- |
+| `Jenkinsfile`   | Pipeline definition   |
+| `Dockerfile`    | Container image spec  |
+| `deploy.sh`     | EC2 deployment script |
+| `pom.xml`       | Maven build config    |
+| `.dockerignore` | Build optimization    |
 
 ## Support
 
@@ -224,6 +240,7 @@ Install Jenkins Slack plugin and get notified of build status!
 ## Success Criteria ✅
 
 After deployment, verify:
+
 - [ ] Jenkins pipeline shows all green stages
 - [ ] `http://ec2-ip:8081` shows application
 - [ ] `/owners`, `/pets`, `/visits` pages work

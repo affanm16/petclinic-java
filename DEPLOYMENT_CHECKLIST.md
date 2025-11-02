@@ -3,11 +3,13 @@
 ## ✅ Pre-Deployment Checklist
 
 ### Jenkins Credentials Setup
+
 - [ ] Docker Hub credentials added (ID: `dockerhub-credentials`)
 - [ ] EC2 SSH key added (ID: `ec2-ssh-key`)
 - [ ] EC2 host address added (ID: `ec2-host`)
 
 ### EC2 Instance Configuration
+
 - [ ] EC2 instance launched and running
 - [ ] Security group configured:
   - Port 22 (SSH) - from Jenkins IP
@@ -17,12 +19,14 @@
 - [ ] MySQL installed and database created
 
 ### Jenkins Server
+
 - [ ] Docker plugin installed
 - [ ] Pipeline plugin installed
 - [ ] Jenkins user added to docker group
 - [ ] Jenkins service restarted
 
 ### Repository Updates
+
 - [ ] Jenkinsfile updated with Docker Hub username
 - [ ] Jenkinsfile updated with correct EC2 user (ec2-user or ubuntu)
 - [ ] All changes committed and pushed to GitHub
@@ -30,6 +34,7 @@
 ## 🚀 Deployment Commands Quick Reference
 
 ### On Jenkins Server
+
 ```bash
 # Add Jenkins to docker group
 sudo usermod -aG docker jenkins
@@ -40,6 +45,7 @@ sudo -u jenkins docker ps
 ```
 
 ### On EC2 Instance
+
 ```bash
 # Install Docker (Amazon Linux)
 sudo yum update -y
@@ -72,6 +78,7 @@ curl http://localhost:8081/actuator/health
 ```
 
 ### Testing Locally (Before EC2 Deployment)
+
 ```bash
 # Build and run locally
 mvn clean package
@@ -92,6 +99,7 @@ docker rm petclinic-test
 ## 🔧 Jenkins Pipeline Variables to Update
 
 Edit `Jenkinsfile` and change:
+
 ```groovy
 DOCKER_REGISTRY = "your-dockerhub-username"  // ← Change this
 EC2_USER = "ec2-user"  // ← Use "ubuntu" for Ubuntu AMI
@@ -99,11 +107,11 @@ EC2_USER = "ec2-user"  // ← Use "ubuntu" for Ubuntu AMI
 
 ## 📋 Required Jenkins Credentials
 
-| Credential ID | Type | Description |
-|--------------|------|-------------|
-| `dockerhub-credentials` | Username/Password | Docker Hub login |
-| `ec2-ssh-key` | SSH Key | EC2 instance SSH key (.pem) |
-| `ec2-host` | Secret Text | EC2 public IP/DNS |
+| Credential ID           | Type              | Description                 |
+| ----------------------- | ----------------- | --------------------------- |
+| `dockerhub-credentials` | Username/Password | Docker Hub login            |
+| `ec2-ssh-key`           | SSH Key           | EC2 instance SSH key (.pem) |
+| `ec2-host`              | Secret Text       | EC2 public IP/DNS           |
 
 ## 🎯 Application URLs After Deployment
 
@@ -116,20 +124,26 @@ EC2_USER = "ec2-user"  // ← Use "ubuntu" for Ubuntu AMI
 ## 🐛 Common Issues & Solutions
 
 ### Issue: Jenkins can't connect to Docker
-**Solution**: 
+
+**Solution**:
+
 ```bash
 sudo usermod -aG docker jenkins
 sudo systemctl restart jenkins
 ```
 
 ### Issue: SSH to EC2 fails
-**Solution**: 
+
+**Solution**:
+
 - Check security group allows port 22 from Jenkins IP
 - Verify SSH key in Jenkins credentials
 - Test SSH manually: `ssh -i key.pem ec2-user@<EC2-IP>`
 
 ### Issue: Container won't start
+
 **Solution**:
+
 ```bash
 # On EC2:
 docker logs petclinic
@@ -140,7 +154,9 @@ sudo systemctl restart mysqld
 ```
 
 ### Issue: Port 8081 already in use
+
 **Solution**:
+
 ```bash
 # On EC2:
 docker stop petclinic
@@ -150,7 +166,9 @@ sudo netstat -tulpn | grep 8081
 ```
 
 ### Issue: Application can't connect to database
+
 **Solution**:
+
 - Verify MySQL is running
 - Check database credentials in `application.properties`
 - Ensure database `pet_clinic` exists
@@ -178,6 +196,7 @@ sudo mysql -u root -p
 ## 🔄 Rollback Procedure
 
 If deployment fails:
+
 ```bash
 # On EC2:
 # Stop current container
@@ -192,6 +211,7 @@ docker run -d --name petclinic -p 8081:8081 \
 ## 📝 Files Modified
 
 ✅ Created/Updated:
+
 - `Dockerfile` - Multi-stage build with Java 17
 - `Jenkinsfile` - Complete CI/CD pipeline for EC2
 - `deploy.sh` - EC2 deployment automation script

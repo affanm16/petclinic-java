@@ -1,8 +1,8 @@
 # 🎯 YOUR SETUP - Jenkins Already on EC2
 
-## Perfect News! 
+## Perfect News!
 
-Since Jenkins is **already on your EC2**, you have the **SIMPLEST possible setup**! 
+Since Jenkins is **already on your EC2**, you have the **SIMPLEST possible setup**!
 
 ## What You DON'T Need:
 
@@ -11,13 +11,13 @@ Since Jenkins is **already on your EC2**, you have the **SIMPLEST possible setup
 ❌ **NO** SSH keys  
 ❌ **NO** ec2-host credential  
 ❌ **NO** ec2-ssh-key credential  
-❌ **NO** file transfers  
+❌ **NO** file transfers
 
 ## What You DO Need:
 
 ✅ MySQL database on the same EC2  
 ✅ Jenkins user added to docker group  
-✅ Port 8081 open in security group  
+✅ Port 8081 open in security group
 
 **That's literally it!** 3 things! 🚀
 
@@ -85,6 +85,7 @@ Everything happens **locally** on the same machine!
 ## Access Your App
 
 After successful build:
+
 - **App**: `http://your-ec2-public-ip:8081`
 - **Health**: `http://your-ec2-public-ip:8081/actuator/health`
 
@@ -97,6 +98,7 @@ After successful build:
 3. **Dockerfile** ← Already optimized
 
 **Ignore these** (they're for remote EC2 deployment):
+
 - ~~JENKINS_SETUP.md~~ (for remote EC2)
 - ~~deploy.sh~~ (for remote EC2)
 
@@ -107,17 +109,20 @@ After successful build:
 **Your setup is:** Jenkins → Docker → App (all same EC2)
 
 **You need:**
+
 - MySQL database
 - Jenkins can use Docker
 - Port 8081 open
 
 **You don't need:**
+
 - Any credentials
 - SSH keys
 - Docker Hub
 - File transfers
 
 **Commands:**
+
 1. Setup MySQL (3 commands above)
 2. Create Jenkins pipeline
 3. Build!

@@ -1,6 +1,7 @@
 # 🎯 Super Simple Setup - Jenkins & App on Same EC2
 
 ## Your Setup
+
 - ✅ Jenkins installed on EC2
 - ✅ Application will run on the same EC2
 - ✅ **NO credentials needed!**
@@ -142,6 +143,7 @@ curl http://localhost:8081/actuator/health
 ## Accessing Your Application
 
 From your browser:
+
 - **Main App**: `http://your-ec2-public-ip:8081`
 - **Owners**: `http://your-ec2-public-ip:8081/owners`
 - **Pets**: `http://your-ec2-public-ip:8081/pets`
@@ -153,6 +155,7 @@ From your browser:
 ## Troubleshooting
 
 ### Jenkins can't access Docker
+
 ```bash
 # Run on EC2:
 sudo usermod -aG docker jenkins
@@ -160,6 +163,7 @@ sudo systemctl restart jenkins
 ```
 
 ### Container fails to start
+
 ```bash
 # Check if MySQL is running:
 sudo systemctl status mysqld
@@ -172,10 +176,12 @@ sudo systemctl restart mysqld
 ```
 
 ### Port 8081 not accessible
+
 - Check EC2 Security Group allows inbound on port 8081
 - Check if container is running: `docker ps`
 
 ### Database connection error
+
 ```bash
 # Verify database exists:
 sudo mysql -e "SHOW DATABASES;"
@@ -213,12 +219,12 @@ Now every push to `main` triggers automatic build and deployment! 🚀
 
 ## Resources Needed
 
-| Resource | Usage |
-|----------|-------|
-| **RAM** | ~2GB (Jenkins + App + MySQL) |
-| **Disk** | ~5GB (OS + Tools + Docker images) |
-| **Instance** | t2.medium recommended |
-| **Ports** | 8080 (Jenkins), 8081 (App) |
+| Resource     | Usage                             |
+| ------------ | --------------------------------- |
+| **RAM**      | ~2GB (Jenkins + App + MySQL)      |
+| **Disk**     | ~5GB (OS + Tools + Docker images) |
+| **Instance** | t2.medium recommended             |
+| **Ports**    | 8080 (Jenkins), 8081 (App)        |
 
 ---
 
@@ -256,7 +262,7 @@ docker image prune -a
 ✅ **Fast deployment** - Everything local  
 ✅ **Low cost** - Single EC2 instance  
 ✅ **Easy debugging** - All logs in one place  
-✅ **Perfect for** - Development, testing, small projects  
+✅ **Perfect for** - Development, testing, small projects
 
 ---
 
@@ -267,7 +273,7 @@ docker image prune -a
 ❌ SSH keys  
 ❌ deploy.sh script  
 ❌ Multiple servers  
-❌ Complex networking  
+❌ Complex networking
 
 **It's all on one machine!** 🎯
 
